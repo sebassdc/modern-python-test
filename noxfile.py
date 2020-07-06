@@ -4,6 +4,21 @@ import nox
 nox.options.sessions = 'lint', 'tests'
 
 
+
+def install_with_constraints(session, *args, **kwargs):
+    with tempfile.NamedTemporaryFile()  as requirements:
+        session.run(
+            "poetry",
+            "export",
+            "--dev",
+            "--format=requirements.txt",
+            f"--output={requirements.name}",
+            external=True,
+        )
+        session.install("-c", requirements.name, *args, **kwargs)
+
+
+
 @nox.session(python=["3.8", "3.7"])
 def tests(session):
     args = session.posargs or ["--cov", "-m", "not e2e"]
@@ -15,19 +30,6 @@ def tests(session):
 
 
 locations = "src", "tests", "noxfile.py"
-
-
-def install_with_constraints(session, *args, **kwargs):
-    with tempfile.NamedTemporaryFile() as requirements:
-        session.run(
-            "poetry",
-            "export",
-            "--dev",
-            "--format=requirements.txt",
-            f"--output={requirements.name}",
-            external=True,
-        )
-        session.install(f"--constraints={requirements.name}", *args, **kwargs)
 
 
 @nox.session(python=["3.8", "3.7"])
