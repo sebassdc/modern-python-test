@@ -1,6 +1,6 @@
-import requests
 import click.testing
 import pytest
+import requests
 
 from modern_python_test import console
 
