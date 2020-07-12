@@ -130,3 +130,9 @@ dmypy.json
 
 # Editor config files
 .vscode
+
+#pytype
+.pytype
+
+#mypy
+mypy.ini
